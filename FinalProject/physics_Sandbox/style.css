@@ -7,3 +7,49 @@
 Handles layout, menu styling, and overall appearance.
 =====================================================
 */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+}
+
+/* Main Menu */
+#menu {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1 {
+    font-size: 40px;
+}
+
+p {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background: #3b82f6;
+    color: white;
+}
+
+button:hover {
+    background: #2563eb;
+}
+
+/* Canvas */
+canvas {
+    display: none;
+    background: #1e293b;
+}
