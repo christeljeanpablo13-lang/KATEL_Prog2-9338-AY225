@@ -21,6 +21,8 @@ canvas.height = 500;
 
 // Game state
 let gameState = "menu"; // menu | playing
+// DAY 2 - Object storage (array)
+let placedObjects = []
 
 // Start game
 startBtn.addEventListener("click", () => {
@@ -61,9 +63,37 @@ function draw() {
     }
 }
 
-// Draw game elements
 function drawGame() {
+    // Draw placed objects
+    placedObjects.forEach(obj => {
+        ctx.fillStyle = "#3b82f6";
+        ctx.fillRect(obj.x - 20, obj.y - 20, obj.width, obj.height);
+    });
+
+    // Text
     ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.fillText("Physics Sandbox Started!", 270, 250);
+    ctx.font = "16px Arial";
+    ctx.fillText("Click to place objects", 20, 30);
 }
+
+// DAY 2 - Create object
+function createObject(x, y) {
+    return {
+        x: x,
+        y: y,
+        width: 40,
+        height: 40
+    };
+}
+
+// DAY 2 - Mouse click to place object
+canvas.addEventListener("click", (event) => {
+    if (gameState !== "playing") return;
+
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    const newObject = createObject(mouseX, mouseY);
+    placedObjects.push(newObject);
+});
