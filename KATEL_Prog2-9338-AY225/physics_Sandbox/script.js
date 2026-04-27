@@ -22,13 +22,14 @@ const restartBtn = document.getElementById("restartBtn");
 canvas.width = 800;
 canvas.height = 500;
 
-// Game state
+// State
 let gameState = "menu";
 
 // Objects
 let objects = [];
+let particles = [];
 
-// Score system
+// Score
 let score = 0;
 const TARGET_SCORE = 3;
 
@@ -41,10 +42,34 @@ const goal = {
     x: 650,
     y: 450,
     width: 120,
-    height: 20
+    height: 20,
+    glow: 0
 };
 
-// Class
+// Particle class
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 5 + 2;
+        this.vx = (Math.random() - 0.5) * 4;
+        this.vy = (Math.random() - 1) * 4;
+        this.life = 30;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life--;
+    }
+
+    draw() {
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(this.x, this.y, this.size, this.size);
+    }
+}
+
+// Object class
 class GameObject {
     constructor(x, y, size = 30) {
         this.x = x;
@@ -52,8 +77,6 @@ class GameObject {
         this.size = size;
         this.velocityY = 0;
         this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
-
-        // 🆕 track if already counted
         this.scored = false;
     }
 
@@ -61,13 +84,12 @@ class GameObject {
         this.velocityY += GRAVITY;
         this.y += this.velocityY;
 
-        // Ground collision
         if (this.y + this.size > ground) {
             this.y = ground - this.size;
             this.velocityY *= -0.4;
         }
 
-        // 🆕 Goal detection with scoring
+        // Goal detection
         if (
             !this.scored &&
             this.x < goal.x + goal.width &&
@@ -77,6 +99,12 @@ class GameObject {
         ) {
             this.scored = true;
             score++;
+            goal.glow = 10;
+
+            // 🆕 spawn particles
+            for (let i = 0; i < 10; i++) {
+                particles.push(new Particle(this.x, this.y));
+            }
 
             updateUI();
 
@@ -88,6 +116,11 @@ class GameObject {
     }
 
     draw() {
+        // Shadow
+        ctx.fillStyle = "rgba(0,0,0,0.3)";
+        ctx.fillRect(this.x + 3, this.y + 3, this.size, this.size);
+
+        // Object
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.size, this.size);
     }
@@ -98,7 +131,7 @@ function updateUI() {
     infoText.textContent = `Score: ${score} / ${TARGET_SCORE}`;
 }
 
-// Start game
+// Start
 startBtn.addEventListener("click", () => {
     gameState = "playing";
 
@@ -113,6 +146,7 @@ startBtn.addEventListener("click", () => {
 // Reset
 resetBtn.addEventListener("click", () => {
     objects = [];
+    particles = [];
     score = 0;
     updateUI();
 });
@@ -120,13 +154,14 @@ resetBtn.addEventListener("click", () => {
 // Restart
 restartBtn.addEventListener("click", () => {
     objects = [];
+    particles = [];
     score = 0;
     gameState = "playing";
     winScreen.style.display = "none";
     updateUI();
 });
 
-// Spawn objects
+// Spawn
 canvas.addEventListener("click", (e) => {
     if (gameState !== "playing") return;
 
@@ -152,6 +187,13 @@ function update() {
     if (gameState !== "playing") return;
 
     objects.forEach(obj => obj.update());
+
+    // Update particles
+    particles = particles.filter(p => p.life > 0);
+    particles.forEach(p => p.update());
+
+    // Reduce glow
+    if (goal.glow > 0) goal.glow--;
 }
 
 function draw() {
@@ -159,13 +201,28 @@ function draw() {
 
     if (gameState === "playing") {
 
-        // Draw goal
+        // Background grid
+        ctx.strokeStyle = "rgba(255,255,255,0.05)";
+        for (let i = 0; i < canvas.width; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, canvas.height);
+            ctx.stroke();
+        }
+
+        // Goal with glow
         ctx.fillStyle = "#22c55e";
         ctx.fillRect(goal.x, goal.y, goal.width, goal.height);
 
+        if (goal.glow > 0) {
+            ctx.fillStyle = "rgba(34,197,94,0.3)";
+            ctx.fillRect(goal.x - 5, goal.y - 5, goal.width + 10, goal.height + 10);
+        }
+
         objects.forEach(obj => obj.draw());
+        particles.forEach(p => p.draw());
 
         ctx.fillStyle = "white";
-        ctx.fillText("Day 10: Score-based goal system", 260, 30);
+        ctx.fillText("Day 11: Visual polish + effects", 260, 30);
     }
 }
