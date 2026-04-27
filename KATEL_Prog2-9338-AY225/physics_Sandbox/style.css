@@ -48,6 +48,34 @@ button:hover {
     background: #2563eb;
 }
 
+/* 🆕 UI BAR */
+#uiBar {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: none;
+    align-items: center;
+    gap: 20px;
+
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+#uiBar span {
+    font-size: 14px;
+}
+
+#resetBtn {
+    background: #ef4444;
+}
+
+#resetBtn:hover {
+    background: #dc2626;
+}
+
 /* Canvas */
 canvas {
     display: none;

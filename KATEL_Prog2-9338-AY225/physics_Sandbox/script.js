@@ -4,8 +4,8 @@
 📘 Programming 2 Final Project
 
 📌 Description:
-Contains the main game loop, state management,
-and rendering logic.
+Contains the main game loop, physics system,
+UI handling, and rendering logic.
 =====================================================
 */
 
@@ -15,12 +15,16 @@ const ctx = canvas.getContext("2d");
 const menu = document.getElementById("menu");
 const startBtn = document.getElementById("startBtn");
 
+// 🆕 UI elements
+const uiBar = document.getElementById("uiBar");
+const resetBtn = document.getElementById("resetBtn");
+
 // Canvas setup
 canvas.width = 800;
 canvas.height = 500;
 
 // Game state
-let gameState = "menu"; // menu | playing
+let gameState = "menu";
 
 // Object storage
 let objects = [];
@@ -37,19 +41,18 @@ class GameObject {
         this.size = size;
         this.velocityY = 0;
 
-        // 🆕 Random color
+        // Random color
         this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
     }
 
     update() {
-        // Apply gravity
         this.velocityY += GRAVITY;
         this.y += this.velocityY;
 
-        // 🆕 Bounce instead of stop
+        // Ground collision with bounce
         if (this.y + this.size > ground) {
             this.y = ground - this.size;
-            this.velocityY *= -0.4; // bounce strength
+            this.velocityY *= -0.4;
         }
     }
 
@@ -66,7 +69,15 @@ startBtn.addEventListener("click", () => {
     menu.style.display = "none";
     canvas.style.display = "block";
 
+    // Show UI bar
+    uiBar.style.display = "flex";
+
     startGame();
+});
+
+// 🆕 Reset button
+resetBtn.addEventListener("click", () => {
+    objects = [];
 });
 
 // Mouse input
@@ -104,15 +115,10 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (gameState === "playing") {
-        drawGame();
+        objects.forEach(obj => obj.draw());
+
+        ctx.fillStyle = "white";
+        ctx.font = "16px Arial";
+        ctx.fillText("Day 8: UI + Reset system", 280, 30);
     }
-}
-
-// Draw game elements
-function drawGame() {
-    objects.forEach(obj => obj.draw());
-
-    ctx.fillStyle = "white";
-    ctx.font = "16px Arial";
-    ctx.fillText("Day 7: Bounce physics added", 280, 30);
 }
