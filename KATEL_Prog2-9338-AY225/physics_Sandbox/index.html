@@ -1,3 +1,21 @@
+<!--
+=====================================================
+🎮 Physics Sandbox Game
+📘 Programming 2 Final Project
+🏫 University of Perpetual Help
+
+👨‍💻 Developers:
+- Christel Jean C. Pablo
+- Karina Cassandra M. Dig
+
+📅 Date Started: April 2026
+
+📌 Description:
+Main HTML structure of the game.
+Includes menu, UI, win screen, and canvas.
+=====================================================
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,28 +25,43 @@
 </head>
 <body>
 
-    <!-- Main Menu -->
+    <!-- ========================
+         MAIN MENU
+    ========================= -->
     <div id="menu">
         <h1>Physics Sandbox</h1>
         <p>Build, simulate, and experiment with physics!</p>
         <button id="startBtn">Start Game</button>
     </div>
 
-    <!-- UI BAR -->
+    <!-- ========================
+         UI BAR
+    ========================= -->
     <div id="uiBar">
         <span id="infoText">Score: 0 / 3</span>
         <button id="resetBtn">Reset</button>
     </div>
 
-    <!-- Win Screen -->
+    <!-- ========================
+         WIN SCREEN
+    ========================= -->
     <div id="winScreen">
         <h1>You Win!</h1>
         <button id="restartBtn">Restart</button>
     </div>
 
-    <!-- Canvas -->
+    <!-- ========================
+         GAME CANVAS
+    ========================= -->
     <canvas id="gameCanvas"></canvas>
 
+    <!-- ========================
+         SCRIPTS (ORDER IMPORTANT)
+    ========================= -->
+    <script src="js/object.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/game.js"></script>
     <script src="script.js"></script>
+
 </body>
 </html>
