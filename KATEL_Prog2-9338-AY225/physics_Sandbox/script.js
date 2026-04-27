@@ -25,12 +25,24 @@ let gameState = "menu"; // menu | playing
 // Object storage
 let objects = [];
 
+// 🆕 DAY 5: Gravity constant
+const GRAVITY = 0.5;
+
 // Object class
 class GameObject {
     constructor(x, y, size = 30) {
         this.x = x;
         this.y = y;
         this.size = size;
+
+        // 🆕 velocity for movement
+        this.velocityY = 0;
+    }
+
+    // 🆕 update movement
+    update() {
+        this.velocityY += GRAVITY;
+        this.y += this.velocityY;
     }
 
     draw() {
@@ -49,7 +61,7 @@ startBtn.addEventListener("click", () => {
     startGame();
 });
 
-// 🆕 DAY 4: Mouse click to create objects
+// Mouse input
 canvas.addEventListener("click", (e) => {
     if (gameState !== "playing") return;
 
@@ -75,6 +87,9 @@ function gameLoop() {
 // Update logic
 function update() {
     if (gameState !== "playing") return;
+
+    // 🆕 apply physics
+    objects.forEach(obj => obj.update());
 }
 
 // Draw function
@@ -88,10 +103,9 @@ function draw() {
 
 // Draw game elements
 function drawGame() {
-    // Draw all objects
     objects.forEach(obj => obj.draw());
 
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
-    ctx.fillText("Day 4: Click to spawn objects", 270, 30);
+    ctx.fillText("Day 5: Gravity applied", 300, 30);
 }
