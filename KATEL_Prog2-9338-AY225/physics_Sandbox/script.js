@@ -13,6 +13,7 @@ const startBtn = document.getElementById("startBtn");
 
 const uiBar = document.getElementById("uiBar");
 const resetBtn = document.getElementById("resetBtn");
+const infoText = document.getElementById("infoText");
 
 const winScreen = document.getElementById("winScreen");
 const restartBtn = document.getElementById("restartBtn");
@@ -22,16 +23,20 @@ canvas.width = 800;
 canvas.height = 500;
 
 // Game state
-let gameState = "menu"; // menu | playing | win
+let gameState = "menu";
 
 // Objects
 let objects = [];
+
+// Score system
+let score = 0;
+const TARGET_SCORE = 3;
 
 // Physics
 const GRAVITY = 0.5;
 const ground = canvas.height;
 
-// 🆕 Goal zone
+// Goal
 const goal = {
     x: 650,
     y: 450,
@@ -47,27 +52,38 @@ class GameObject {
         this.size = size;
         this.velocityY = 0;
         this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+
+        // 🆕 track if already counted
+        this.scored = false;
     }
 
     update() {
         this.velocityY += GRAVITY;
         this.y += this.velocityY;
 
-        // ground collision
+        // Ground collision
         if (this.y + this.size > ground) {
             this.y = ground - this.size;
             this.velocityY *= -0.4;
         }
 
-        // 🆕 CHECK GOAL COLLISION
+        // 🆕 Goal detection with scoring
         if (
+            !this.scored &&
             this.x < goal.x + goal.width &&
             this.x + this.size > goal.x &&
             this.y < goal.y + goal.height &&
             this.y + this.size > goal.y
         ) {
-            gameState = "win";
-            winScreen.style.display = "block";
+            this.scored = true;
+            score++;
+
+            updateUI();
+
+            if (score >= TARGET_SCORE) {
+                gameState = "win";
+                winScreen.style.display = "block";
+            }
         }
     }
 
@@ -75,6 +91,11 @@ class GameObject {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.size, this.size);
     }
+}
+
+// UI update
+function updateUI() {
+    infoText.textContent = `Score: ${score} / ${TARGET_SCORE}`;
 }
 
 // Start game
@@ -85,19 +106,24 @@ startBtn.addEventListener("click", () => {
     canvas.style.display = "block";
     uiBar.style.display = "flex";
 
+    updateUI();
     startGame();
 });
 
 // Reset
 resetBtn.addEventListener("click", () => {
     objects = [];
+    score = 0;
+    updateUI();
 });
 
 // Restart
 restartBtn.addEventListener("click", () => {
     objects = [];
+    score = 0;
     gameState = "playing";
     winScreen.style.display = "none";
+    updateUI();
 });
 
 // Spawn objects
@@ -111,7 +137,7 @@ canvas.addEventListener("click", (e) => {
     objects.push(new GameObject(x, y));
 });
 
-// Game loop
+// Loop
 function startGame() {
     requestAnimationFrame(loop);
 }
@@ -133,13 +159,13 @@ function draw() {
 
     if (gameState === "playing") {
 
-        // Draw goal zone
+        // Draw goal
         ctx.fillStyle = "#22c55e";
         ctx.fillRect(goal.x, goal.y, goal.width, goal.height);
 
         objects.forEach(obj => obj.draw());
 
         ctx.fillStyle = "white";
-        ctx.fillText("Day 9: Reach the green zone!", 270, 30);
+        ctx.fillText("Day 10: Score-based goal system", 260, 30);
     }
 }

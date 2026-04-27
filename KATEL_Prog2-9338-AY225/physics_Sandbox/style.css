@@ -1,15 +1,95 @@
-/* KEEP YOUR DAY 8 CSS + ADD THIS */
+/*
+=====================================================
+🎮 Physics Sandbox Game
+📘 Programming 2 Final Project
 
-/* Goal zone */
-#goal {
-    position: absolute;
-    width: 120px;
-    height: 20px;
-    background: #22c55e;
-    border-radius: 5px;
+📌 Description:
+Handles layout, menu styling, UI bar,
+win screen, and overall appearance.
+=====================================================
+*/
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    text-align: center;
 }
 
-/* Win screen */
+/* =========================
+   MAIN MENU
+========================= */
+#menu {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1 {
+    font-size: 40px;
+    margin: 0;
+}
+
+p {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background: #3b82f6;
+    color: white;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #2563eb;
+}
+
+/* Reset button */
+#resetBtn {
+    background: #ef4444;
+}
+
+#resetBtn:hover {
+    background: #dc2626;
+}
+
+/* =========================
+   UI BAR
+========================= */
+#uiBar {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: none;
+    align-items: center;
+    gap: 20px;
+
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+#uiBar span {
+    font-size: 14px;
+}
+
+/* =========================
+   WIN SCREEN
+========================= */
 #winScreen {
     display: none;
     position: absolute;
@@ -22,4 +102,12 @@
 #winScreen h1 {
     font-size: 50px;
     color: #22c55e;
+}
+
+/* =========================
+   CANVAS
+========================= */
+canvas {
+    display: none;
+    background: #1e293b;
 }
