@@ -25,8 +25,9 @@ let gameState = "menu"; // menu | playing
 // Object storage
 let objects = [];
 
-// 🆕 DAY 5: Gravity constant
+// Physics
 const GRAVITY = 0.5;
+const ground = canvas.height; // 🆕 ground level
 
 // Object class
 class GameObject {
@@ -34,15 +35,19 @@ class GameObject {
         this.x = x;
         this.y = y;
         this.size = size;
-
-        // 🆕 velocity for movement
         this.velocityY = 0;
     }
 
-    // 🆕 update movement
     update() {
+        // Apply gravity
         this.velocityY += GRAVITY;
         this.y += this.velocityY;
+
+        // 🆕 Ground collision
+        if (this.y + this.size > ground) {
+            this.y = ground - this.size;
+            this.velocityY = 0;
+        }
     }
 
     draw() {
@@ -88,7 +93,6 @@ function gameLoop() {
 function update() {
     if (gameState !== "playing") return;
 
-    // 🆕 apply physics
     objects.forEach(obj => obj.update());
 }
 
@@ -107,5 +111,5 @@ function drawGame() {
 
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
-    ctx.fillText("Day 5: Gravity applied", 300, 30);
+    ctx.fillText("Day 6: Ground collision added", 270, 30);
 }
