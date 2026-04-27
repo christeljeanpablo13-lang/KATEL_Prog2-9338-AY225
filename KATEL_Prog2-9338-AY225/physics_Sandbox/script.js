@@ -22,10 +22,10 @@ canvas.height = 500;
 // Game state
 let gameState = "menu"; // menu | playing
 
-// 🆕 DAY 3: Object storage
+// Object storage
 let objects = [];
 
-// 🆕 DAY 3: Object class
+// Object class
 class GameObject {
     constructor(x, y, size = 30) {
         this.x = x;
@@ -49,6 +49,17 @@ startBtn.addEventListener("click", () => {
     startGame();
 });
 
+// 🆕 DAY 4: Mouse click to create objects
+canvas.addEventListener("click", (e) => {
+    if (gameState !== "playing") return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    objects.push(new GameObject(x, y));
+});
+
 // Start function
 function startGame() {
     requestAnimationFrame(gameLoop);
@@ -64,13 +75,10 @@ function gameLoop() {
 // Update logic
 function update() {
     if (gameState !== "playing") return;
-
-    // (Nothing yet for Day 3)
 }
 
 // Draw function
 function draw() {
-    // Clear screen
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (gameState === "playing") {
@@ -80,11 +88,10 @@ function draw() {
 
 // Draw game elements
 function drawGame() {
-    // 🆕 Draw all objects
+    // Draw all objects
     objects.forEach(obj => obj.draw());
 
-    // Keep your original text (optional)
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
-    ctx.fillText("Day 3: Object system ready", 280, 30);
+    ctx.fillText("Day 4: Click to spawn objects", 270, 30);
 }
