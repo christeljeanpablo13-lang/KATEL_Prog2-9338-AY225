@@ -1,17 +1,3 @@
-/*
-=====================================================
-🎮 Physics Sandbox Game
-📘 Programming 2 Final Project
-
-📌 Description:
-Main controller file.
-Handles UI, input, and game loop connection.
-=====================================================
-*/
-
-// =========================
-// ELEMENTS
-// =========================
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -25,23 +11,27 @@ const infoText = document.getElementById("infoText");
 const winScreen = document.getElementById("winScreen");
 const restartBtn = document.getElementById("restartBtn");
 
-// =========================
-// CANVAS SETUP
-// =========================
 canvas.width = 800;
 canvas.height = 500;
 
-// =========================
-// UI UPDATE
-// =========================
+// 🆕 GAME CONTROL
+let isGameRunning = false;
+
+// 🆕 LIMITS
+const MAX_OBJECTS = 50;
+let lastSpawnTime = 0;
+const SPAWN_DELAY = 100;
+
+// UI
 function updateUI() {
     infoText.textContent = `Score: ${score} / ${TARGET_SCORE}`;
 }
 
-// =========================
-// START GAME
-// =========================
-startBtn.addEventListener("click", () => {
+// START
+startBtn.onclick = () => {
+    if (isGameRunning) return;
+
+    isGameRunning = true;
     gameState = "playing";
 
     menu.style.display = "none";
@@ -49,58 +39,48 @@ startBtn.addEventListener("click", () => {
     uiBar.style.display = "flex";
 
     updateUI();
-    startGameLoop();
-});
+    loop();
+};
 
-// =========================
-// RESET GAME
-// =========================
-resetBtn.addEventListener("click", () => {
+// RESET
+resetBtn.onclick = () => {
     objects = [];
     particles = [];
     score = 0;
-
     updateUI();
-});
+};
 
-// =========================
-// RESTART AFTER WIN
-// =========================
-restartBtn.addEventListener("click", () => {
+// RESTART
+restartBtn.onclick = () => {
     objects = [];
     particles = [];
     score = 0;
-
     gameState = "playing";
     winScreen.style.display = "none";
-
     updateUI();
-});
+};
 
-// =========================
-// SPAWN OBJECTS
-// =========================
-canvas.addEventListener("click", (e) => {
+// SPAWN
+canvas.onclick = (e) => {
     if (gameState !== "playing") return;
+
+    const now = Date.now();
+    if (now - lastSpawnTime < SPAWN_DELAY) return;
+    if (objects.length >= MAX_OBJECTS) return;
+
+    lastSpawnTime = now;
 
     const rect = canvas.getBoundingClientRect();
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    objects.push(new GameObject(
+        e.clientX - rect.left,
+        e.clientY - rect.top
+    ));
+};
 
-    objects.push(new GameObject(x, y));
-});
-
-// =========================
-// GAME LOOP
-// =========================
-function startGameLoop() {
-    requestAnimationFrame(gameLoop);
-}
-
-function gameLoop() {
+// LOOP
+function loop() {
     updateGame();
     drawGame();
-
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(loop);
 }
