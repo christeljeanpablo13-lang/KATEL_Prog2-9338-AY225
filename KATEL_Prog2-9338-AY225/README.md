@@ -1,0 +1,2 @@
+# KATEL_Prog2-9338-AY225
+We are Group 6, composed of Christel Pablo and Cassandra Dig, and we’ve been assigned to develop a Physics Sandbox Game as part of our project. Our goal is to create an interactive environment where players can experiment with physics concepts in a fun and engaging way, combining creativity with educational value. This repository will showcase our progress, including design ideas, core mechanics, and implementation details, as we work toward building a sandbox experience that highlights both learning and play.
