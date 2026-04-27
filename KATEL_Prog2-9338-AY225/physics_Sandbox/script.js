@@ -2,46 +2,50 @@
 =====================================================
 🎮 Physics Sandbox Game
 📘 Programming 2 Final Project
-
-📌 Description:
-Contains the main game loop, physics system,
-UI handling, and rendering logic.
 =====================================================
 */
 
-// Get elements
+// Elements
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const menu = document.getElementById("menu");
 const startBtn = document.getElementById("startBtn");
 
-// 🆕 UI elements
 const uiBar = document.getElementById("uiBar");
 const resetBtn = document.getElementById("resetBtn");
 
-// Canvas setup
+const winScreen = document.getElementById("winScreen");
+const restartBtn = document.getElementById("restartBtn");
+
+// Canvas
 canvas.width = 800;
 canvas.height = 500;
 
 // Game state
-let gameState = "menu";
+let gameState = "menu"; // menu | playing | win
 
-// Object storage
+// Objects
 let objects = [];
 
 // Physics
 const GRAVITY = 0.5;
 const ground = canvas.height;
 
-// Object class
+// 🆕 Goal zone
+const goal = {
+    x: 650,
+    y: 450,
+    width: 120,
+    height: 20
+};
+
+// Class
 class GameObject {
     constructor(x, y, size = 30) {
         this.x = x;
         this.y = y;
         this.size = size;
         this.velocityY = 0;
-
-        // Random color
         this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
     }
 
@@ -49,10 +53,21 @@ class GameObject {
         this.velocityY += GRAVITY;
         this.y += this.velocityY;
 
-        // Ground collision with bounce
+        // ground collision
         if (this.y + this.size > ground) {
             this.y = ground - this.size;
             this.velocityY *= -0.4;
+        }
+
+        // 🆕 CHECK GOAL COLLISION
+        if (
+            this.x < goal.x + goal.width &&
+            this.x + this.size > goal.x &&
+            this.y < goal.y + goal.height &&
+            this.y + this.size > goal.y
+        ) {
+            gameState = "win";
+            winScreen.style.display = "block";
         }
     }
 
@@ -68,19 +83,24 @@ startBtn.addEventListener("click", () => {
 
     menu.style.display = "none";
     canvas.style.display = "block";
-
-    // Show UI bar
     uiBar.style.display = "flex";
 
     startGame();
 });
 
-// 🆕 Reset button
+// Reset
 resetBtn.addEventListener("click", () => {
     objects = [];
 });
 
-// Mouse input
+// Restart
+restartBtn.addEventListener("click", () => {
+    objects = [];
+    gameState = "playing";
+    winScreen.style.display = "none";
+});
+
+// Spawn objects
 canvas.addEventListener("click", (e) => {
     if (gameState !== "playing") return;
 
@@ -91,34 +111,35 @@ canvas.addEventListener("click", (e) => {
     objects.push(new GameObject(x, y));
 });
 
-// Start function
+// Game loop
 function startGame() {
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(loop);
 }
 
-// Game loop
-function gameLoop() {
+function loop() {
     update();
     draw();
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(loop);
 }
 
-// Update logic
 function update() {
     if (gameState !== "playing") return;
 
     objects.forEach(obj => obj.update());
 }
 
-// Draw function
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (gameState === "playing") {
+
+        // Draw goal zone
+        ctx.fillStyle = "#22c55e";
+        ctx.fillRect(goal.x, goal.y, goal.width, goal.height);
+
         objects.forEach(obj => obj.draw());
 
         ctx.fillStyle = "white";
-        ctx.font = "16px Arial";
-        ctx.fillText("Day 8: UI + Reset system", 280, 30);
+        ctx.fillText("Day 9: Reach the green zone!", 270, 30);
     }
 }
