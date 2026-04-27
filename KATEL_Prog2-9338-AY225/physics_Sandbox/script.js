@@ -27,7 +27,7 @@ let objects = [];
 
 // Physics
 const GRAVITY = 0.5;
-const ground = canvas.height; // 🆕 ground level
+const ground = canvas.height;
 
 // Object class
 class GameObject {
@@ -36,6 +36,9 @@ class GameObject {
         this.y = y;
         this.size = size;
         this.velocityY = 0;
+
+        // 🆕 Random color
+        this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
     }
 
     update() {
@@ -43,15 +46,15 @@ class GameObject {
         this.velocityY += GRAVITY;
         this.y += this.velocityY;
 
-        // 🆕 Ground collision
+        // 🆕 Bounce instead of stop
         if (this.y + this.size > ground) {
             this.y = ground - this.size;
-            this.velocityY = 0;
+            this.velocityY *= -0.4; // bounce strength
         }
     }
 
     draw() {
-        ctx.fillStyle = "cyan";
+        ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.size, this.size);
     }
 }
@@ -111,5 +114,5 @@ function drawGame() {
 
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
-    ctx.fillText("Day 6: Ground collision added", 270, 30);
+    ctx.fillText("Day 7: Bounce physics added", 280, 30);
 }
