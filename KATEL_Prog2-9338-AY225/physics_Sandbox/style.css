@@ -14,15 +14,12 @@ win screen, and overall appearance.
 ========================= */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: #0f172a;
     color: white;
     text-align: center;
 }
 
-/* =========================
-   GAME MENU (UPGRADED)
-========================= */
 #menu {
     position: absolute;
     width: 100%;
@@ -34,132 +31,41 @@ body {
 }
 
 .menu-box {
-    text-align: center;
-    padding: 30px;
     background: rgba(0,0,0,0.6);
+    padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    max-width: 400px;
 }
 
-h1 {
-    font-size: 50px;
-    margin-bottom: 10px;
-}
-
-.tagline {
-    color: #94a3b8;
-    margin-bottom: 15px;
-}
-
-p {
-    font-size: 15px;
-    opacity: 0.85;
-}
-
-/* Instructions section */
-.instructions {
-    margin-top: 20px;
-    text-align: left;
-}
-
-.instructions h3 {
-    color: #22c55e;
-    margin-bottom: 5px;
-}
-
-.instructions ul {
-    padding-left: 20px;
-}
-
-.instructions li {
-    font-size: 13px;
-    margin-bottom: 5px;
-}
-
-/* =========================
-   BUTTONS
-========================= */
 button {
-    margin-top: 15px;
-    padding: 12px 25px;
-    font-size: 15px;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
+    padding: 12px 20px;
     background: #3b82f6;
+    border: none;
     color: white;
-    transition: 0.2s;
+    cursor: pointer;
 }
 
-button:hover {
-    background: #2563eb;
-    transform: scale(1.05);
-}
-
-/* Reset button */
 #resetBtn {
     background: #ef4444;
 }
 
-#resetBtn:hover {
-    background: #dc2626;
-}
-
-/* =========================
-   UI BAR
-========================= */
 #uiBar {
     position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-
     display: none;
-    align-items: center;
-    gap: 20px;
-
-    background: rgba(0, 0, 0, 0.5);
-    padding: 10px 20px;
-    border-radius: 10px;
-
-    backdrop-filter: blur(5px);
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    gap: 10px;
 }
 
-#uiBar span {
-    font-size: 14px;
-}
-
-/* =========================
-   WIN SCREEN
-========================= */
 #winScreen {
     display: none;
     position: absolute;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
 }
 
-#winScreen h1 {
-    font-size: 50px;
-    color: #22c55e;
-    animation: pop 0.5s ease;
-}
-
-/* Animation */
-@keyframes pop {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* =========================
-   CANVAS
-========================= */
 canvas {
     display: none;
     background: #1e293b;
-    border-top: 2px solid rgba(255,255,255,0.05);
 }

@@ -8,11 +8,11 @@ class Particle {
     }
 
     update() {
-    this.x += this.vx * 0.95;
-    this.y += this.vy * 0.95;
-    this.vy += 0.1; // gravity effect
-    this.life--;
-}
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.1;
+        this.life--;
+    }
 
     draw(ctx) {
         ctx.fillStyle = "yellow";
