@@ -90,3 +90,27 @@ function loop() {
     drawGame();
     requestAnimationFrame(loop);
 }
+let isDrawing = false;
+let currentPath = [];
+
+canvas.onmousedown = (e) => {
+    if (gameState !== "playing") return;
+
+    isDrawing = true;
+    currentPath = [];
+};
+
+canvas.onmousemove = (e) => {
+    if (!isDrawing) return;
+
+    const rect = canvas.getBoundingClientRect();
+
+    currentPath.push({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    });
+};
+
+canvas.onmouseup = () => {
+    isDrawing = false;
+};
