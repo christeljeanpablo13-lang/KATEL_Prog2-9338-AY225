@@ -25,33 +25,50 @@ Includes menu, UI, win screen, and canvas.
 </head>
 <body>
 
-    <!-- MENU -->
-    <div id="menu">
+<!-- MENU -->
+<div id="menu">
+    <div class="menu-box">
         <h1>Physics Sandbox</h1>
-        <p>Build, simulate, and experiment with physics!</p>
-        <button id="startBtn">Start Game</button>
+        <p class="tagline">Draw. Build. Solve.</p>
+
+        <p>
+            Create your own solutions using physics! Draw objects,
+            interact with gravity, and guide them to the goal.
+        </p>
+
+        <button id="startBtn">▶ Start Game</button>
+
+        <div class="instructions">
+            <h3>How to Play</h3>
+            <ul>
+                <li>Drag mouse to draw objects</li>
+                <li>Reach the goal area</li>
+                <li>Use reset to try again</li>
+            </ul>
+        </div>
     </div>
+</div>
 
-    <!-- UI -->
-    <div id="uiBar">
-        <span id="infoText">Score: 0 / 3</span>
-        <button id="resetBtn">Reset</button>
-    </div>
+<!-- UI -->
+<div id="uiBar">
+    <span id="infoText">Score: 0 / 3</span>
+    <button id="resetBtn">Reset</button>
+</div>
 
-    <!-- WIN -->
-    <div id="winScreen">
-        <h1>You Win!</h1>
-        <button id="restartBtn">Restart</button>
-    </div>
+<!-- WIN -->
+<div id="winScreen">
+    <h1>You Win!</h1>
+    <button id="restartBtn">Restart</button>
+</div>
 
-    <canvas id="gameCanvas"></canvas>
+<canvas id="gameCanvas"></canvas>
 
-    <!-- SCRIPTS -->
-    <script src="js/object.js"></script>
-    <script src="js/effects.js"></script>
-    <script src="js/game.js"></script>
-    <script src="script.js"></script>
-    <script src="js/sound.js"></script>
-    
+<!-- SCRIPTS -->
+<script src="js/object.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/game.js"></script>
+<script src="js/sound.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
