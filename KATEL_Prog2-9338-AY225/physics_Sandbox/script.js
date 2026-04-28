@@ -112,5 +112,11 @@ canvas.onmousemove = (e) => {
 };
 
 canvas.onmouseup = () => {
+    if (!isDrawing) return;
+
     isDrawing = false;
+
+    if (currentPath.length > 2) {
+        objects.push(new DrawnObject(currentPath));
+    }
 };
