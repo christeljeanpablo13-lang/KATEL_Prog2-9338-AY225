@@ -9,14 +9,18 @@ class GameObject {
     }
 
     update() {
-    // smoother gravity
     this.velocityY += GRAVITY * 0.98;
     this.y += this.velocityY;
 
-    // basic ground collision (stable version)
     if (this.y + this.size > ground) {
         this.y = ground - this.size;
-        this.velocityY *= -0.3;
+
+        // improved bounce logic
+        if (Math.abs(this.velocityY) > 1) {
+            this.velocityY *= -0.35;
+        } else {
+            this.velocityY = 0;
+        }
     }
 }
 
