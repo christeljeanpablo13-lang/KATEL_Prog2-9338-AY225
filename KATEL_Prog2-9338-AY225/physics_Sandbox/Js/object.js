@@ -9,34 +9,16 @@ class GameObject {
     }
 
     update() {
-        this.velocityY += GRAVITY;
-        this.y += this.velocityY;
+    // smoother gravity
+    this.velocityY += GRAVITY * 0.98;
+    this.y += this.velocityY;
 
-        if (this.y + this.size > ground) {
-            this.y = ground - this.size;
-            this.velocityY *= -0.4;
-        }
-
-        if (!this.scored &&
-            this.x < goal.x + goal.width &&
-            this.x + this.size > goal.x &&
-            this.y < goal.y + goal.height &&
-            this.y + this.size > goal.y) {
-
-            this.scored = true;
-            score++;
-            goal.glow = 10;
-
-            spawnParticles(this.x, this.y);
-            updateUI();
-
-            // FIX: prevent multiple triggers
-            if (score >= TARGET_SCORE && gameState !== "win") {
-                gameState = "win";
-                winScreen.style.display = "block";
-            }
-        }
+    // basic ground collision (stable version)
+    if (this.y + this.size > ground) {
+        this.y = ground - this.size;
+        this.velocityY *= -0.3;
     }
+}
 
     draw(ctx) {
         ctx.fillStyle = "rgba(0,0,0,0.3)";
