@@ -32,3 +32,34 @@ class GameObject {
         ctx.fillRect(this.x, this.y, this.size, this.size);
     }
 }
+class DrawnObject {
+    constructor(points) {
+        this.points = points;
+        this.velocityY = 0;
+    }
+
+    update() {
+        this.velocityY += GRAVITY;
+
+        for (let p of this.points) {
+            p.y += this.velocityY;
+
+            if (p.y > ground) {
+                p.y = ground;
+            }
+        }
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(this.points[0].x, this.points[0].y);
+
+        for (let i = 1; i < this.points.length; i++) {
+            ctx.lineTo(this.points[i].x, this.points[i].y);
+        }
+
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+    }
+}
