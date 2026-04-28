@@ -22,35 +22,27 @@ const MAX_OBJECTS = 50;
 let lastSpawnTime = 0;
 const SPAWN_DELAY = 100;
 
-// UI
+// 🖊️ DRAW SYSTEM
+let isDrawing = false;
+let currentPath = [];
+
+// =========================
+// UI UPDATE
+// =========================
 function updateUI() {
     infoText.textContent = `Score: ${score} / ${TARGET_SCORE}`;
+
+    // ✨ visual feedback
+    if (score > 0) {
+        uiBar.style.boxShadow = "0 0 15px rgba(34,197,94,0.4)";
+    } else {
+        uiBar.style.boxShadow = "none";
+    }
 }
 
-// START
-startBtn.onclick = () => {
-    if (isGameRunning) return;
-
-    isGameRunning = true;
-    gameState = "playing";
-
-    menu.style.display = "none";
-    canvas.style.display = "block";
-    uiBar.style.display = "flex";
-
-    updateUI();
-    loop();
-};
-
-// RESET
-resetBtn.onclick = () => {
-    objects = [];
-    particles = [];
-    score = 0;
-    updateUI();
-};
-
-// RESTART
+// =========================
+// START GAME
+// =========================
 startBtn.onclick = () => {
     if (isGameRunning) return;
 
@@ -66,7 +58,32 @@ startBtn.onclick = () => {
     requestAnimationFrame(loop);
 };
 
-// SPAWN
+// =========================
+// RESET
+// =========================
+resetBtn.onclick = () => {
+    objects = [];
+    particles = [];
+    score = 0;
+    updateUI();
+};
+
+// =========================
+// RESTART (WIN)
+// =========================
+restartBtn.onclick = () => {
+    objects = [];
+    particles = [];
+    score = 0;
+    gameState = "playing";
+
+    winScreen.style.display = "none";
+    updateUI();
+};
+
+// =========================
+// CLICK SPAWN (OLD SYSTEM)
+// =========================
 canvas.onclick = (e) => {
     if (gameState !== "playing") return;
 
@@ -84,20 +101,16 @@ canvas.onclick = (e) => {
     ));
 };
 
-// LOOP
-function loop() {
-    updateGame();
-    drawGame();
-    requestAnimationFrame(loop);
-}
-let isDrawing = false;
-let currentPath = [];
-
+// =========================
+// DRAW SYSTEM (CRAYON STYLE)
+// =========================
 canvas.onmousedown = (e) => {
     if (gameState !== "playing") return;
 
     isDrawing = true;
     currentPath = [];
+
+    playSound("bounce"); // 🔊 feedback
 };
 
 canvas.onmousemove = (e) => {
@@ -120,3 +133,12 @@ canvas.onmouseup = () => {
         objects.push(new DrawnObject(currentPath));
     }
 };
+
+// =========================
+// GAME LOOP
+// =========================
+function loop() {
+    updateGame();
+    drawGame();
+    requestAnimationFrame(loop);
+}
