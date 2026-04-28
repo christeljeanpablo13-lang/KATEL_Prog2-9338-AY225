@@ -51,13 +51,19 @@ resetBtn.onclick = () => {
 };
 
 // RESTART
-restartBtn.onclick = () => {
-    objects = [];
-    particles = [];
-    score = 0;
+startBtn.onclick = () => {
+    if (isGameRunning) return;
+
+    isGameRunning = true;
     gameState = "playing";
-    winScreen.style.display = "none";
+
+    menu.style.display = "none";
+    canvas.style.display = "block";
+    uiBar.style.display = "flex";
+
     updateUI();
+
+    requestAnimationFrame(loop);
 };
 
 // SPAWN
