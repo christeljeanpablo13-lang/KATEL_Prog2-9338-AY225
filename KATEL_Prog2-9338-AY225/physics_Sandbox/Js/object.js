@@ -12,14 +12,38 @@ class GameObject {
     this.velocityY += GRAVITY * 0.98;
     this.y += this.velocityY;
 
+    // ground collision
     if (this.y + this.size > ground) {
         this.y = ground - this.size;
 
-        // improved bounce logic
         if (Math.abs(this.velocityY) > 1) {
             this.velocityY *= -0.35;
         } else {
             this.velocityY = 0;
+        }
+    }
+
+    // 🎯 ADD THIS WHOLE BLOCK (goal + sound)
+    if (!this.scored &&
+        this.x < goal.x + goal.width &&
+        this.x + this.size > goal.x &&
+        this.y < goal.y + goal.height &&
+        this.y + this.size > goal.y) {
+
+        this.scored = true;
+        score++;
+        goal.glow = 15;
+
+        spawnParticles(this.x, this.y);
+        updateUI();
+
+        playSound("score"); // 🔊 sound when scoring
+
+        if (score >= TARGET_SCORE && gameState !== "win") {
+            gameState = "win";
+            winScreen.style.display = "block";
+
+            playSound("win"); // 🔊 win sound
         }
     }
 }
