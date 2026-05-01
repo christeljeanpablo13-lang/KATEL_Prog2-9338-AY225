@@ -1,71 +1,352 @@
 /*
-=====================================================
-🎮 Physics Sandbox Game
-📘 Programming 2 Final Project
-
-📌 Description:
-Handles layout, menu styling, UI bar,
-win screen, and overall appearance.
-=====================================================
+  =====================================================
+  🎮 Physics Sandbox — World of Goo × Crayon Physics
+  📌 Description:
+    Full UI styling — menu, HUD, win screen, tools,
+    canvas, cursor, and animations.
+    Theme: warm parchment paper + crayon hand-drawn feel.
+  =====================================================
 */
 
-/* =========================
-   GLOBAL
-========================= */
-body {
-    margin: 0;
-    font-family: Arial;
-    background: #0f172a;
-    color: white;
-    text-align: center;
+/* ========================= RESET & BASE ========================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Schoolbell', cursive;
+  background: #f5ecd7;
+  color: #4a2c00;
+  cursor: none; /* hidden — we use custom cursor dot */
+}
+
+/* ========================= CANVAS ========================= */
+#gameCanvas {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5ecd7;
+  cursor: none;
+}
+
+/* ========================= CUSTOM CURSOR ========================= */
+#cursorDot {
+  display: none;
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(244, 185, 66, 0.75);
+  border: 2.5px solid #e8881a;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  transition: width 0.1s, height 0.1s, background 0.15s;
+}
+
+#cursorDot.erase {
+  background: rgba(231, 76, 60, 0.7);
+  border-color: #c0391a;
+  width: 36px;
+  height: 36px;
+}
+
+#cursorDot.goo {
+  background: rgba(93, 173, 226, 0.7);
+  border-color: #1a78c0;
+}
+
+/* ========================= MENU ========================= */
 #menu {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, #1e293b, #0f172a);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background: radial-gradient(ellipse at 50% 40%, #fff8ec 0%, #e8d5a3 100%);
+  cursor: default;
 }
 
-.menu-box {
-    background: rgba(0,0,0,0.6);
-    padding: 30px;
-    border-radius: 15px;
+.menu-inner {
+  text-align: center;
+  padding: 20px;
+  max-width: 480px;
+  width: 95%;
 }
 
-button {
-    padding: 12px 20px;
-    background: #3b82f6;
-    border: none;
-    color: white;
-    cursor: pointer;
+.menu-deco {
+  font-size: 38px;
+  margin-bottom: 8px;
+  animation: bounce-deco 2s ease-in-out infinite;
 }
 
-#resetBtn {
-    background: #ef4444;
+@keyframes bounce-deco {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
 }
 
+.menu-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 46px;
+  color: #4a2c00;
+  line-height: 1.1;
+  text-shadow: 3px 3px 0 #c8a46e, 5px 5px 0 rgba(0,0,0,0.1);
+}
+
+.menu-title span {
+  font-size: 24px;
+  color: #7a5530;
+}
+
+.menu-sub {
+  font-size: 20px;
+  color: #7a5530;
+  letter-spacing: 1px;
+  margin: 6px 0 16px;
+}
+
+.menu-instructions {
+  background: rgba(255, 255, 255, 0.65);
+  border: 2.5px dashed #c8a46e;
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin: 0 auto 18px;
+  font-size: 14px;
+  color: #5a3a10;
+  line-height: 1.8;
+  text-align: left;
+}
+
+/* Level Grid */
+.level-grid {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.level-card {
+  width: 84px;
+  height: 84px;
+  border-radius: 16px;
+  border: 3px solid #a07040;
+  background: #fff8ec;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+  box-shadow: 0 3px 0 #a07040;
+}
+
+.level-card:hover {
+  background: #ffe8b0;
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 6px 0 #a07040;
+}
+
+.level-card:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 #a07040;
+}
+
+.level-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 30px;
+  color: #e8881a;
+  line-height: 1;
+}
+
+.level-name {
+  font-size: 13px;
+  color: #7a5530;
+}
+
+/* ========================= BUTTONS ========================= */
+.btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 22px;
+  padding: 12px 36px;
+  border-radius: 50px;
+  border: 3px solid #6b3c00;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #6b3c00, 0 6px 14px rgba(0,0,0,0.18);
+  transition: transform 0.1s, box-shadow 0.1s;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #6b3c00, 0 8px 18px rgba(0,0,0,0.22);
+}
+
+.btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #6b3c00;
+}
+
+.btn.small {
+  font-size: 16px;
+  padding: 8px 22px;
+}
+
+.btn-orange {
+  background: linear-gradient(135deg, #f4b942, #e8881a);
+  color: #fff;
+  border-color: #6b3c00;
+  box-shadow: 0 4px 0 #6b3c00, 0 6px 14px rgba(0,0,0,0.18);
+}
+
+.btn-green {
+  background: linear-gradient(135deg, #5dd464, #2ca832);
+  color: #fff;
+  border-color: #1a6e1e;
+  box-shadow: 0 4px 0 #1a6e1e, 0 6px 14px rgba(0,0,0,0.18);
+}
+
+.btn-green:hover { box-shadow: 0 6px 0 #1a6e1e, 0 8px 18px rgba(0,0,0,0.22); }
+.btn-green:active { box-shadow: 0 2px 0 #1a6e1e; }
+
+/* ========================= HUD / UI BAR ========================= */
 #uiBar {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
-    gap: 10px;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: rgba(255, 248, 236, 0.93);
+  border-bottom: 3px solid #c8a46e;
+  backdrop-filter: blur(4px);
 }
 
+.hud-score {
+  font-family: 'Fredoka One', cursive;
+  font-size: 20px;
+  color: #4a2c00;
+  background: #fff3d6;
+  border: 2px solid #c8a46e;
+  border-radius: 30px;
+  padding: 4px 18px;
+  white-space: nowrap;
+}
+
+.hud-score span {
+  color: #e8881a;
+}
+
+.tool-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hud-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* Tool Buttons */
+.tool-btn {
+  font-family: 'Schoolbell', cursive;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 2px solid #a07040;
+  background: #fff8ec;
+  color: #5a3a10;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.tool-btn:hover {
+  background: #ffe8b0;
+  border-color: #7a5030;
+}
+
+.tool-btn.active {
+  background: #f4b942;
+  border-color: #6b3c00;
+  color: #3a1a00;
+  font-weight: bold;
+  box-shadow: 0 2px 0 #6b3c00;
+}
+
+.tool-btn.small {
+  font-size: 13px;
+  padding: 5px 12px;
+}
+
+/* ========================= WIN SCREEN ========================= */
 #winScreen {
-    display: none;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(255, 248, 230, 0.94);
+  backdrop-filter: blur(6px);
 }
 
-canvas {
-    display: none;
-    background: #1e293b;
+.win-emoji {
+  font-size: 64px;
+  animation: pop-in 0.4s ease-out;
+  margin-bottom: 6px;
 }
+
+.win-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 60px;
+  color: #2ca832;
+  text-shadow: 3px 3px 0 #1a6e1e, 5px 5px 0 rgba(0,0,0,0.1);
+  animation: wiggle 0.6s ease-in-out infinite alternate;
+}
+
+.win-sub {
+  font-size: 22px;
+  color: #7a5530;
+  margin: 8px 0 26px;
+}
+
+@keyframes wiggle {
+  from { transform: rotate(-2deg) scale(1); }
+  to   { transform: rotate(2deg) scale(1.03); }
+}
+
+@keyframes pop-in {
+  0%   { transform: scale(0); opacity: 0; }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ========================= RESPONSIVE ========================= */
+@media (max-width: 600px) {
+  .menu-title { font-size: 34px; }
+  .tool-group { gap: 4px; }
+  .tool-btn   { font-size: 12px; padding: 5px 10px; }
+  #uiBar      { gap: 6px; padding: 6px 10px; }
+}
+

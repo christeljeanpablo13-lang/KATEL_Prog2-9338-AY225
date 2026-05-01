@@ -1,0 +1,168 @@
+We are Group 6, composed of Christel Pablo and Cassandra Dig, and we’ve been assigned to develop a Physics Sandbox Game as part of our project. Our goal is to create an interactive environment where players can experiment with physics concepts in a fun and engaging way, combining creativity with educational value. This repository will showcase our progress, including design ideas, core mechanics, and implementation details, as we work toward building a sandbox experience that highlights both learning and play.
+
+# ✏️ Crayon Physics Sandbox
+**A physics puzzle sandbox game — draw, drop, and solve!**
+
+---
+
+## 🎮 Overview
+Crayon Physics Sandbox is a browser-based physics game inspired by the classic *Crayon Physics Deluxe*. Draw crayon lines that become solid objects, spawn characters and props, and solve physics puzzles — all in one self-contained HTML file.
+
+**No installation. No server. No audio files needed.** Just open `crayon-physics.html` in any modern browser.
+
+---
+
+## 🐛 Bug Fixes (from original code)
+| Bug | Fix Applied |
+|-----|-------------|
+| **No sound** | Replaced `new Audio('assets/sounds/bounce.mp3')` (missing files) with **Web Audio API** — all sounds are procedurally generated in-browser, no audio assets needed |
+| Fragmented multi-file structure | Merged `index.html`, `style.css`, `script.js`, `js/game.js`, `js/object.js`, `js/effects.js`, `js/sound.js` into one portable file |
+| `gameStarted` gate missing on some input paths | Input events now fully gated behind `gameStarted` flag |
+| Drag velocity was incorrect | Fixed drag velocity calculation using delta from new position |
+| Missing AudioContext unlock | `getAudioCtx()` called on first user gesture to satisfy browser autoplay policy |
+
+---
+
+## ✨ New Features Added
+
+### 🏠 Landing Page
+- Animated floating crayon doodles background
+- Three big buttons: **Level Mode**, **Free Mode**, **How to Play**
+- Smooth fade-in/out transition to game
+
+### 🧩 Level Mode (10 Levels)
+Each level has a unique goal and increasing difficulty:
+| # | Name | Goal Type |
+|---|------|-----------|
+| 1 | Ramp It Up! | Fill zone |
+| 2 | Star Collector | Collect 3 stars |
+| 3 | Safe Landing | Land on pad |
+| 4 | Domino Effect | Topple dominoes |
+| 5 | Bridge Builder | Cross the gap |
+| 6 | Star Cascade | Collect 5 stars |
+| 7 | Zero Gravity?! | Navigate without gravity |
+| 8 | Goo Madness! | Fill with goo |
+| 9 | Rube Goldberg | Chain reactions |
+| 10 | Multi-Ball Madness | Guide 3 balls |
+
+- **Level Select Screen** — visual grid with locked/unlocked states
+- **Star rating** — 1–3 stars based on how few drawings you used
+- **Progressive unlock** — complete a level to unlock the next
+- **Win screen** with Next Level and Back to Menu buttons
+
+### 🎨 Free Mode
+- Fully open sandbox — no goals, no limits
+- Gravity toggle, save/load system (5 slots via localStorage)
+- Pre-spawned objects to welcome you to the canvas
+
+### 🔊 Procedural Sound Effects
+All sounds generated via Web Audio API — no files needed:
+- **Bounce** — sine wave with frequency drop on collision
+- **Draw** — subtle sawtooth scratch sound while drawing
+- **Star collect** — three-note ascending chime
+- **Bomb** — filtered noise burst
+- **Win** — ascending 6-note fanfare
+- **Freeze** — rising triangle wave
+- **Erase** — descending sawtooth
+
+Toggle sound with the 🔊 button (top-right in-game).
+
+---
+
+## 🕹️ How to Play
+
+### Drawing
+- **✏️ Draw** — click and drag on the canvas to draw crayon lines
+- Lines become solid physics objects that balls and boxes collide with
+- **Colors** — pick from the palette in the top bar
+- **Thickness** — use the slider to adjust line width
+
+### Tools
+| Tool | Action |
+|------|--------|
+| ✏️ Draw | Freehand crayon lines |
+| ✋ Drag | Click and drag any object |
+| 🗑️ Erase | Click to delete objects or lines |
+| ❄️ Freeze | Lock objects in place |
+
+### Spawn Objects
+Click the left sidebar buttons, then click the canvas to place:
+| Object | Behavior |
+|--------|----------|
+| ⚽ Ball | Bouncy circle |
+| 📦 Box | Heavy block, stacks |
+| 🐕 Dog | Roaming AI character |
+| 🟢 Goo | Spring-connected blob cluster |
+| 🪢 Rope | Click start, drag to endpoint |
+| ⛓️ Chain | Like rope but heavier links |
+| 💣 Bomb | Explodes after 2 seconds |
+| ⭐ Star | Collectible (needed in levels) |
+
+### Keyboard
+| Key | Action |
+|-----|--------|
+| `Escape` | Close overlays / level select |
+
+---
+
+## 💾 Save System
+In Free Mode, use the **💾 Save** button to save up to 5 slots (stored in `localStorage`). Load any slot to restore your scene.
+
+---
+
+## ⚙️ Technical Details
+
+| Property | Value |
+|----------|-------|
+| **File type** | Single self-contained `.html` |
+| **Dependencies** | Google Fonts (loaded from CDN, game works offline without them) |
+| **Physics engine** | Custom impulse-based physics (no external lib) |
+| **Substeps** | 3 (smooth simulation) |
+| **Constraint solver** | 4 iterations per frame |
+| **Max objects** | 200 (auto-culls offscreen) |
+| **Target FPS** | 60 (displayed in HUD) |
+| **Sound** | Web Audio API — no external files |
+
+### Physics Features
+- Rigid body circle + box collision with impulse resolution
+- Angular velocity and rotation
+- Gravity toggle per level
+- Rope/chain constraints with sag rendering
+- Spring constraints (Goo blobs)
+- Bomb blast radius with force application
+- Drawn shapes as collision geometry (line segments)
+- Particle system for effects
+
+---
+
+## 🗂️ File Structure
+```
+crayon-physics.html    ← Single file, everything included
+README.md              ← This file
+```
+
+---
+
+## 🌐 Browser Compatibility
+| Browser | Support |
+|---------|---------|
+| Chrome 90+ | ✅ Full |
+| Firefox 88+ | ✅ Full |
+| Safari 14+ | ✅ Full |
+| Edge 90+ | ✅ Full |
+| Mobile Chrome | ✅ Touch supported |
+| Mobile Safari | ✅ Touch supported |
+
+> **Note:** Open the file directly from your filesystem (`file://`) or serve it from any local/web server. No backend required.
+
+---
+
+## 🚀 Quick Start
+1. Download `crayon-physics.html`
+2. Open it in your browser
+3. Click **▶ Level Mode** to solve puzzles, or **🎨 Free Mode** to experiment
+4. Draw, spawn, and have fun!
+
+---
+
+*Built with vanilla HTML, CSS, and JavaScript — no frameworks, no dependencies, no build step.*
